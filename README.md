@@ -1,6 +1,5 @@
 🏋️‍♂️ Fitness Tracker App
 A full-stack fitness tracker built using the MERN stack that helps users log workouts, track progress, and stay on top of their fitness goals.
-
 🚀 Features
 User authentication (JWT-based)
 
