@@ -87,8 +87,8 @@ const SignIn = () => {
         <Button
           text="SignIn"
           onClick={handelSignIn}
-          isLoading={loading}
-          isDisabled={buttonDisabled}
+          $isLoading={loading}
+          $isDisabled={buttonDisabled}
         />
       </div>
     </Container>

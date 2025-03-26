@@ -93,8 +93,8 @@ const SignUp = () => {
         <Button
           text="SignUp"
           onClick={handelSignUp}
-          isLoading={loading}
-          isDisabled={buttonDisabled}
+          $isLoading={loading}
+          $isDisabled={buttonDisabled}
         />
       </div>
     </Container>

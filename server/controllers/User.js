@@ -9,7 +9,7 @@ dotenv.config();
 
 export const UserRegister = async (req, res, next) => {
   try {
-    const { email, password, name, img } = req.body;
+    const { email, password, name} = req.body;
 
     // Check if the email is in use
     const existingUser = await User.findOne({ email }).exec();
@@ -17,18 +17,17 @@ export const UserRegister = async (req, res, next) => {
       return next(createError(409, "Email is already in use."));
     }
 
-    const salt = bcrypt.genSaltSync(10);
-    const hashedPassword = bcrypt.hashSync(password, salt);
-
+    const salt = await bcrypt.genSalt(10);
+    const hashedPassword = await bcrypt.hash(password, salt);
+    
     const user = new User({
       name,
       email,
       password: hashedPassword,
-      img,
     });
     const createdUser = await user.save();
     const token = jwt.sign({ id: createdUser._id }, process.env.JWT, {
-      expiresIn: "9999 years",
+      expiresIn: "1h",
     });
     return res.status(200).json({ token, user });
   } catch (error) {
@@ -41,19 +40,20 @@ export const UserLogin = async (req, res, next) => {
     const { email, password } = req.body;
 
     const user = await User.findOne({ email: email });
-    // Check if user exists
+    
     if (!user) {
       return next(createError(404, "User not found"));
     }
     console.log(user);
-    // Check if password is correct
-    const isPasswordCorrect = await bcrypt.compareSync(password, user.password);
+    
+    const isPasswordCorrect = await bcrypt.compare(password, user.password);
+
     if (!isPasswordCorrect) {
       return next(createError(403, "Incorrect password"));
     }
 
     const token = jwt.sign({ id: user._id }, process.env.JWT, {
-      expiresIn: "9999 years",
+      expiresIn: "1h",
     });
 
     return res.status(200).json({ token, user });
@@ -61,7 +61,6 @@ export const UserLogin = async (req, res, next) => {
     return next(error);
   }
 };
-
 export const getUserDashboard = async (req, res, next) => {
   try {
     const userId = req.user?.id;
@@ -204,9 +203,10 @@ export const getWorkoutsByDate = async (req, res, next) => {
     );
 
     const todaysWorkouts = await Workout.find({
-      userId: userId,
+      user: userId,
       date: { $gte: startOfDay, $lt: endOfDay },
     });
+    console.log("Fetched workouts:", todaysWorkouts);
     const totalCaloriesBurnt = todaysWorkouts.reduce(
       (total, workout) => total + workout.caloriesBurned,
       0
@@ -286,20 +286,21 @@ export const addWorkout = async (req, res, next) => {
 
 // Function to parse workout details from a line
 const parseWorkoutLine = (parts) => {
-  const details = {};
-  console.log(parts);
-  if (parts.length >= 5) {
-    details.workoutName = parts[1].substring(1).trim();
-    details.sets = parseInt(parts[2].split("sets")[0].substring(1).trim());
-    details.reps = parseInt(
-      parts[2].split("sets")[1].split("reps")[0].substring(1).trim()
-    );
-    details.weight = parseFloat(parts[3].split("kg")[0].substring(1).trim());
-    details.duration = parseFloat(parts[4].split("min")[0].substring(1).trim());
-    console.log(details);
-    return details;
+  try {
+    if (parts.length >= 5) {
+      return {
+        workoutName: parts[1]?.substring(1).trim() || "Unnamed Workout",
+        sets: parseInt(parts[2]?.split("sets")[0]?.substring(1).trim()) || 0,
+        reps: parseInt(parts[2]?.split("sets")[1]?.split("reps")[0]?.substring(1).trim()) || 0,
+        weight: parseFloat(parts[3]?.split("kg")[0]?.substring(1).trim()) || 0,
+        duration: parseFloat(parts[4]?.split("min")[0]?.substring(1).trim()) || 0,
+      };
+    }
+    return null;
+  } catch (error) {
+    console.error("Error parsing workout:", error);
+    return null;
   }
-  return null;
 };
 
 // Function to calculate calories burnt for a workout

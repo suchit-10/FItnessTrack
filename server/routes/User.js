@@ -12,9 +12,10 @@ const router = express.Router();
 
 router.post("/signup", UserRegister);
 router.post("/signin", UserLogin);
+// router.put("/:id", verifyToken, updateUser);
 
-router.get("/dashboard", verifyToken, getUserDashboard);
-router.get("/workout", verifyToken, getWorkoutsByDate);
-router.post("/workout", verifyToken, addWorkout);
+router.use(verifyToken);
+router.get("/dashboard", getUserDashboard);
+router.route("/workout").get(getWorkoutsByDate).post(addWorkout);
 
 export default router;

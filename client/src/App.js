@@ -2,7 +2,7 @@ import { ThemeProvider, styled } from "styled-components";
 import { lightTheme } from "./utils/Themes";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import Authentication from "./pages/Authentication";
-import { useState } from "react";
+// import { useState } from "react";
 import { useSelector } from "react-redux";
 import Navbar from "./components/Navbar";
 import Dashboard from "./pages/Dashboard";
@@ -24,21 +24,22 @@ function App() {
   const { currentUser } = useSelector((state) => state.user);
   return (
     <ThemeProvider theme={lightTheme}>
-      <BrowserRouter>
-        {currentUser ? (
-          <Container>
-            <Navbar currentUser={currentUser} />
-            <Routes>
-              <Route path="/" exact element={<Dashboard />} />
-              <Route path="/workouts" exact element={<Workouts />} />
-            </Routes>
-          </Container>
-        ) : (
-          <Container>
-            <Authentication />
-          </Container>
-        )}
-      </BrowserRouter>
+  <BrowserRouter future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
+    {currentUser ? (
+      <Container>
+      <Navbar currentUser={currentUser} />
+      <Routes>
+        <Route path="/" exact element={<Dashboard />} />
+        <Route path="/workouts" exact element={<Workouts />} />
+      </Routes>
+    </Container>
+  ) : (
+    <Container>
+      <Authentication />
+    </Container>
+  )}
+  </BrowserRouter>
+
     </ThemeProvider>
   );
 }

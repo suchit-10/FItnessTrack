@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React  from "react";
 import styled from "styled-components";
 import TextInput from "./TextInput";
 import Button from "./Button";
@@ -49,8 +49,8 @@ const AddWorkout = ({ workout, setWorkout, addNewWorkout, buttonLoading }) => {
         text="Add Workout"
         small
         onClick={() => addNewWorkout()}
-        isLoading={buttonLoading}
-        isDisabled={buttonLoading}
+        $isLoading={buttonLoading}
+        $isDisabled={buttonLoading}
       />
     </Card>
   );

@@ -30,15 +30,15 @@ border: 1px solid ${({ theme }) => theme.secondary};
   background: ${theme.primary};
 `}
 
-  ${({ isDisabled }) =>
-    isDisabled &&
+  ${({ $isDisabled }) =>
+    $isDisabled &&
     `
   opacity: 0.8;
   cursor: not-allowed;
 
   `}
-  ${({ isLoading }) =>
-    isLoading &&
+  ${({ $isLoading }) =>
+    $isLoading &&
     `
     opacity: 0.8;
   cursor: not-allowed;
@@ -69,8 +69,8 @@ color: ${theme.primary};
 
 const button = ({
   text,
-  isLoading,
-  isDisabled,
+  $isLoading,
+  $isDisabled,
   rightIcon,
   leftIcon,
   type,
@@ -82,23 +82,23 @@ const button = ({
 }) => {
   return (
     <Button
-      onClick={() => !isDisabled && !isLoading && onClick()}
-      isDisabled={isDisabled}
+      onClick={() => !$isDisabled && !$isLoading && onClick()}
+      $isDisabled={$isDisabled}
       type={type}
-      isLoading={isLoading}
+      $isLoading={$isLoading}
       flex={flex}
       small={small}
       outlined={outlined}
       full={full}
     >
-      {isLoading && (
+      {$isLoading && (
         <CircularProgress
           style={{ width: "18px", height: "18px", color: "inherit" }}
         />
       )}
       {leftIcon}
       {text}
-      {isLoading && <> . . .</>}
+      {$isLoading && <> . . .</>}
       {rightIcon}
     </Button>
   );
