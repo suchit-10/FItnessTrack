@@ -103,3 +103,6 @@ Fitness Tracker is a full-stack web application designed to help users track the
 
 ## Contributing
 Contributions are welcome! Please feel free to submit a Pull Request.
+
+![Fitrack](https://github.com/user-attachments/assets/0f78eeaa-26fb-4450-8f9d-11cf898b6c89)
+
